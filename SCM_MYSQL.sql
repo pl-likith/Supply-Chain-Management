@@ -1,0 +1,48 @@
+#PRODUCTWISE-SALES---------------------------
+SELECT PRODUCT_FAMILY,SUM(SALES) FROM PGE
+group by PRODUCT_FAMILY;
+
+#REGIONWISE-SALES---------------------
+SELECT STORE_REGION AS REGION,SUM(SALES) FROM PGE
+group by REGION;
+
+#TOP5 STORES---------------------
+SELECT STORE_NAME AS STORE,SUM(SALES)AS SALES FROM PGE
+group by STORE
+order by SALES DESC
+LIMIT 5;
+
+#STATEWISE-SALES-------------------------
+	SELECT STORE_STATE AS STATE,SUM(SALES) FROM PGE
+group by STATE;
+
+#PURCHASEWISE-SALES------------------
+    select PURCHASE, SUM(SALES) FROM PGE
+    group by PURCHASE;
+    
+#DAILYWISE-SALES---------------------------
+	SELECT DAY,SUM(SALES) FROM PGE
+    group by DAY
+    order by DAY ASC;
+    
+ 
+
+
+#SALES-GROWTH------------------------------
+SELECT 
+    YEAR(DATE) AS Year,
+    SUM(SALES) AS Total_Sales,
+    LAG(SUM(SALES)) OVER (ORDER BY YEAR(DATE)) AS Previous_Year_Sales,
+    COALESCE((SUM(SALES) - LAG(SUM(SALES)) OVER (ORDER BY YEAR(DATE))) / LAG(SUM(SALES)) OVER (ORDER BY YEAR(DATE)) * 100, 0) AS Sales_Growth_Percentage
+FROM 
+    PGE
+GROUP BY 
+    YEAR(DATE)
+ORDER BY 
+    YEAR(DATE);
+
+#TOTAL-INV----------------------------
+SELECT SUM(QUANTITY_ON_HAND) AS TOTAL_INV FROM INV;
+
+#INV-VALUE-------------------------------
+SELECT SUM(INV_VALUE) AS INV_VALUE FROM INV;
